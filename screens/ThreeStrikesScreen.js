@@ -1,11 +1,11 @@
 import React from 'react';
 import { View } from 'react-native';
-import Counter from '../counter';
+import ThreeStrikes from '../threestrikes';
 
 class ThreeStrikesScreen extends React.Component {
     render() {
         return <View>
-            <Counter { ...this.props } />
+            <ThreeStrikes />
         </View>;
     }
 }

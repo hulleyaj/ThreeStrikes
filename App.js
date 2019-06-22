@@ -6,8 +6,14 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Provider } from "mobx-react";
 import observableCounterStore from './counter/models/ObservableCounterStore';
+import observableThreeStrikesStore from'./threestrikes/models/ObservableThreeStrikesStore';
 
 import AppNavigator from './navigation/AppNavigator';
+
+const stores = {
+  counter: observableCounterStore,
+  threeStrikes: observableThreeStrikesStore
+}
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
@@ -21,8 +27,9 @@ export default function App(props) {
       />
     );
   } else {
+
     return (
-      <Provider counter={observableCounterStore}>
+      <Provider { ...stores }>
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
           <AppNavigator />

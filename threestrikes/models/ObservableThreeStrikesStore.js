@@ -29,7 +29,7 @@ class ObservableThreeStrikesStore extends Models {
 
     pullPuckFromBucket = () => this.pulledPuck = this.bucket[Math.floor(Math.random() * this.bucket.length)];
 
-    takeGuess(index) {
+    takeGuess = index => {
         if(index >= 0 && index < price.length && price[index] === this.pulledPuck) {
             this.popPuck(this.pulledPuck);
             this.correctGuesses[index] = this.pulledPuck;

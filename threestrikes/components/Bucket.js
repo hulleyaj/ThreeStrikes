@@ -10,7 +10,6 @@ class Bucket extends React.Component {
 
     onButtonClick(threeStrikes) {
         if (this.pulledStrike(threeStrikes)) {
-            //discarding a strike should probably be in the store... think about it first when i start implementing guessing
             threeStrikes.popPuck(threeStrikes.pulledPuck);
             threeStrikes.pullPuckFromBucket();
         } else if (this.awaitingPulledPuck(threeStrikes)) {

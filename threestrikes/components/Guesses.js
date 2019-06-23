@@ -1,14 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { observer } from 'mobx-react';
+import { EMPTY } from '../models/ObservableThreeStrikesStore';
 
 @observer
 class Guesses extends React.Component {
-    renderGuesses = ({ correctGuesses }) =>
+    onGuessPress(index, takeGuess) {
+        takeGuess(index);
+    }
+
+    renderGuesses = ({ correctGuesses, takeGuess }) =>
         correctGuesses.map((guess, index) => {
-            return <View key={ index } style={ styles.guess }>
-                <Text style={ styles.guessText }>{ guess }</Text>
-            </View>;
+            const guessText = guess !== EMPTY ? guess : ' ';
+            return <TouchableOpacity 
+            key={ index } 
+            style={ styles.guess }
+            onPress={ () => this.onGuessPress(index, takeGuess) }
+            >
+                <Text style={ styles.guessText }>{ guessText }</Text>
+            </TouchableOpacity>;
         });
 
     render() {

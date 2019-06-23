@@ -1,26 +1,77 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
+import { observer } from 'mobx-react';
+import { STRIKE, EMPTY } from '../models/ObservableThreeStrikesStore';
 
+@observer
 class Bucket extends React.Component {
-    constructor(props){
-        super(props);
+    pulledStrike = ({ pulledPuck }) => pulledPuck === STRIKE;
+    awaitingPulledPuck = ({ pulledPuck }) => pulledPuck === EMPTY;
 
-        this.state = {
-            currentPuck: -1
-        };
+    onButtonClick(threeStrikes) {
+        if (this.pulledStrike(threeStrikes)) {
+            //discarding a strike should probably be in the store... think about it first when i start implementing guessing
+            threeStrikes.popPuck(threeStrikes.pulledPuck);
+            threeStrikes.pullPuckFromBucket();
+        } else if (this.awaitingPulledPuck(threeStrikes)) {
+            threeStrikes.pullPuckFromBucket();
+        } 
     }
 
-    pullPuck = () => this.setState({ currentPuck: this.props.threeStrikes.getPuckFromBucket() });
-
     render() {
-        return <View>
+        const { threeStrikes } = this.props;
+        const pulledPuckText = this.pulledStrike(threeStrikes) ? 'X' : threeStrikes.pulledPuck;
+        const pulledPuckStyle = this.pulledStrike(threeStrikes) ? styles.pulledPuckStrike : styles.pulledPuck;
+        const buttonText = this.pulledStrike(threeStrikes) ? 'discard strike' : 'pull puck from bucket';
+        const buttonColor = (this.awaitingPulledPuck(threeStrikes) || this.pulledStrike(threeStrikes)) ? 'rgb(22,186,232)' : 'rgb(150,150,150)';
+
+        return <View style={ styles.bucket }>
             <Button
-                title="Get Puck"
-                onPress={() => this.pullPuck()}
+                title={ buttonText }
+                onPress={() => this.onButtonClick(threeStrikes) }
+                color={ buttonColor }
             />
-            <Text>{this.state.currentPuck}</Text>
+            {
+                threeStrikes.pulledPuck !== EMPTY ?
+                    <View style={pulledPuckStyle}>
+                        <Text style={styles.pulledPuckText}>
+                            {pulledPuckText}
+                        </Text>
+                    </View> :
+                    null
+            }
         </View>;
     }
 }
 
 export default Bucket;
+
+const puckStyle = {
+    width: 150,
+    height: 150,
+    borderRadius: '50%',
+    alignItems: 'center',
+    borderStyle: 'solid',
+    borderColor: 'grey',
+    borderWidth: 2,
+    marginTop: 20
+};
+
+const styles = StyleSheet.create({
+    bucket: {
+        alignItems: 'center',
+        marginTop: 50
+    },
+    pulledPuck: {
+        ...puckStyle,
+        backgroundColor: 'rgb(92,195,84)'
+    },
+    pulledPuckStrike: {
+        ...puckStyle,
+        backgroundColor: 'rgb(255,60,60)'
+    },
+    pulledPuckText: {
+        fontSize: 100,
+        color: 'white'
+    }
+});

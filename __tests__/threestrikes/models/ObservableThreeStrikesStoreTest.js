@@ -1,4 +1,4 @@
-import observableThreeStrikesStore, { strike } from '../../../threestrikes/models/ObservableThreeStrikesStore';
+import observableThreeStrikesStore, { STRIKE, EMPTY } from '../../../threestrikes/models/ObservableThreeStrikesStore';
 
 beforeEach(() => {
     observableThreeStrikesStore.reset();
@@ -11,63 +11,67 @@ it('should have a bucket', () => {
 it('should remove number puck from bucket', () => {
     observableThreeStrikesStore.popPuck(6);
     expect(observableThreeStrikesStore.bucket).toEqual(
-        [1, 2, 5, 7, 8, strike, strike, strike]
+        [1, 2, 5, 7, 8, STRIKE, STRIKE, STRIKE]
     );
 });
 
 it('should remove strike puck from bucket', () => {
-    observableThreeStrikesStore.popPuck(strike);
+    observableThreeStrikesStore.popPuck(STRIKE);
     expect(observableThreeStrikesStore.bucket).toEqual(
-        [1, 2, 5, 6, 7, 8, strike, strike]
+        [1, 2, 5, 6, 7, 8, STRIKE, STRIKE]
     );
 });
 
 it('should calculate isStruckOut', () => {
-    observableThreeStrikesStore.popPuck(strike);
+    observableThreeStrikesStore.popPuck(STRIKE);
     expect(observableThreeStrikesStore.isStruckOut).toEqual(false);
-    observableThreeStrikesStore.popPuck(strike);
+    observableThreeStrikesStore.popPuck(STRIKE);
     expect(observableThreeStrikesStore.isStruckOut).toEqual(false);
-    observableThreeStrikesStore.popPuck(strike);
+    observableThreeStrikesStore.popPuck(STRIKE);
     expect(observableThreeStrikesStore.isStruckOut).toEqual(true);
 });
 
 it('should get puck from bucket', () => {
-    const puck = observableThreeStrikesStore.getPuckFromBucket();
-    expect(observableThreeStrikesStore.bucket.indexOf(puck) !== -1).toEqual(true);
+    observableThreeStrikesStore.pullPuckFromBucket();
+    expect(observableThreeStrikesStore.bucket.indexOf(observableThreeStrikesStore.pulledPuck)).not.toEqual(-1);
 });
 
 it('should remove puck from bucket on correct guess', () => {
-    const puck = 2;
-    observableThreeStrikesStore.takeGuess(puck, 0)
-    expect(observableThreeStrikesStore.bucket.indexOf(puck) === -1).toEqual(true);
+    observableThreeStrikesStore.pulledPuck = 2;
+    observableThreeStrikesStore.takeGuess(0)
+    expect(observableThreeStrikesStore.bucket.indexOf(2)).toEqual(-1);
+    expect(observableThreeStrikesStore.pulledPuck).toEqual(EMPTY)
 });
 
 it('should put back puck in bucket on incorrect guess', () => {
-    const puck = 2;
-    observableThreeStrikesStore.takeGuess(puck, 1)
-    expect(observableThreeStrikesStore.bucket.indexOf(puck) === -1).toEqual(false);
+    observableThreeStrikesStore.pulledPuck = 2;
+    observableThreeStrikesStore.takeGuess(1)
+    expect(observableThreeStrikesStore.bucket.indexOf(2)).not.toEqual(-1);
+    expect(observableThreeStrikesStore.pulledPuck).toEqual(EMPTY)
 });
 
-it('should initialize correctGuesses to the lenth of the price', () => {
-    expect(observableThreeStrikesStore.correctGuesses).toEqual([-1, -1, -1, -1, -1, -1]);
+it('should initialize correctGuesses to the length of the price', () => {
+    expect(observableThreeStrikesStore.correctGuesses).toEqual([EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]);
 });
 
 it('should add to correct guesses if made correct guess', () => {
-    const puck = 8;
-    observableThreeStrikesStore.takeGuess(puck, 1)
-    expect(observableThreeStrikesStore.correctGuesses).toEqual([-1, 8, -1, -1, -1, -1]);
+    observableThreeStrikesStore.pulledPuck = 8;
+    observableThreeStrikesStore.takeGuess(1)
+    expect(observableThreeStrikesStore.correctGuesses).toEqual([EMPTY, 8, EMPTY, EMPTY, EMPTY, EMPTY]);
 });
 
 it('should not add to correct guesses if made incorrect guess', () => {
-    const puck = 8;
-    observableThreeStrikesStore.takeGuess(puck, 5)
-    expect(observableThreeStrikesStore.correctGuesses).toEqual([-1, -1, -1, -1, -1, -1]);
+    observableThreeStrikesStore.pulledPuck = 8;
+    observableThreeStrikesStore.takeGuess(5)
+    expect(observableThreeStrikesStore.correctGuesses).toEqual([EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]);
 });
 
 it('should not break on take guess with invalid index', () => {
-    const puck = 8;
-    observableThreeStrikesStore.takeGuess(puck, -1)
-    expect(observableThreeStrikesStore.correctGuesses).toEqual([-1, -1, -1, -1, -1, -1]);
-    observableThreeStrikesStore.takeGuess(puck, 7)
-    expect(observableThreeStrikesStore.correctGuesses).toEqual([-1, -1, -1, -1, -1, -1]);
+    observableThreeStrikesStore.pulledPuck = 8;
+    observableThreeStrikesStore.takeGuess(-1)
+    expect(observableThreeStrikesStore.correctGuesses).toEqual([EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]);
+
+    observableThreeStrikesStore.pulledPuck = 8;
+    observableThreeStrikesStore.takeGuess(7)
+    expect(observableThreeStrikesStore.correctGuesses).toEqual([EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]);
 });

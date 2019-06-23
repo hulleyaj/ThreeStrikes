@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { inject } from 'mobx-react';
+import Strikes from './components/Strikes';
 import Guesses from './components/Guesses';
 import Bucket from './components/Bucket';
 
@@ -8,7 +9,8 @@ import Bucket from './components/Bucket';
 class ThreeStrikes extends React.Component {
     render() {
         return <View>
-            <Guesses {...this.props} />
+            <Strikes { ...this.props } />
+            <Guesses { ...this.props } />
             <Bucket { ...this.props } />
         </View>
     }

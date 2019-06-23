@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { observer } from 'mobx-react';
 
+@observer
 class Guesses extends React.Component {
     renderGuesses = ({ correctGuesses }) =>
         correctGuesses.map((guess, index) => {

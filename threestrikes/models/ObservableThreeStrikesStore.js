@@ -2,17 +2,19 @@ import { observable, computed } from "mobx";
 import Models from '../../helpers/models/Models';
 
 const price = [2, 8, 5, 7, 1, 6];
-export const strike = -1;
+export const STRIKE = -100;
+export const EMPTY = -1;
 
 class ObservableThreeStrikesStore extends Models {
     initialState = {
-        bucket: [1, 2, 5, 6, 7, 8, strike, strike, strike],
-        correctGuesses: price.map(() => -1)
-        //I NEED A CURRENT PUCK PIECE OF STATE, TAKE GUESS WRONG CLEARS THIS VALUE, RENDER BUCKET OFF OF THIS
+        bucket: [1, 2, 5, 6, 7, 8, STRIKE, STRIKE, STRIKE],
+        correctGuesses: price.map(() => EMPTY),
+        pulledPuck: EMPTY
     };
 
-    @observable bucket;
-    @observable correctGuesses;
+    @observable bucket = null;
+    @observable correctGuesses = null;
+    @observable pulledPuck = null;
 
     constructor(){
         super();
@@ -20,18 +22,19 @@ class ObservableThreeStrikesStore extends Models {
     }
 
     @computed get isStruckOut() {
-        return this.bucket.indexOf(strike) === -1;
+        return this.bucket.indexOf(STRIKE) === -1;
     }
 
     popPuck = puck => this.bucket.splice(this.bucket.indexOf(puck), 1);
 
-    getPuckFromBucket = () => this.bucket[Math.floor(Math.random() * this.bucket.length)];
+    pullPuckFromBucket = () => this.pulledPuck = this.bucket[Math.floor(Math.random() * this.bucket.length)];
 
-    takeGuess(puck, index) {
-        if(index >= 0 && index < price.length && price[index] === puck) {
-            this.popPuck(2);
-            this.correctGuesses[index] = puck;
+    takeGuess(index) {
+        if(index >= 0 && index < price.length && price[index] === this.pulledPuck) {
+            this.popPuck(this.pulledPuck);
+            this.correctGuesses[index] = this.pulledPuck;
         }
+        this.pulledPuck = EMPTY;
     }
 }
 

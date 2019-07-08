@@ -1,9 +1,22 @@
 import { observable, computed } from "mobx";
 import Models from '../../helpers/models/Models';
+import ThreeStrikesService from '../services/ThreeStrikesService';
 
 const price = [2, 8, 5, 7, 1, 6];
 export const STRIKE = -100;
 export const EMPTY = -1;
+
+class ThreeStrikesItem {
+    @observable Id;
+    @observable Item;
+    @observable Price;
+
+    constructor(item) {
+        this.Id = item.Id;
+        this.Item = item.Item;
+        this.Price = item.Price;
+    }
+}
 
 class ObservableThreeStrikesStore extends Models {
     initialState = {
@@ -16,9 +29,12 @@ class ObservableThreeStrikesStore extends Models {
     @observable correctGuesses = null;
     @observable pulledPuck = null;
 
+    threeStrikesService;
+
     constructor(){
         super();
         this.reset();
+        this.threeStrikesService = new ThreeStrikesService();
     }
 
     @computed get isStruckOut() {
@@ -35,6 +51,25 @@ class ObservableThreeStrikesStore extends Models {
             this.correctGuesses[index] = this.pulledPuck;
         }
         this.pulledPuck = EMPTY;
+    }
+
+    getItemsAsync = async item => {
+        try {
+            var params = {
+                item
+            };
+            const urlParams = new URLSearchParams(Object.entries(params));
+            const data = await this.threeStrikesService.get(item ? urlParams : '');
+            // runInAction(() => {
+            //     this.countryData = data;
+            // });
+            console.log('woahhh data = ', data);
+        } catch (error) {
+            console.log('error = ', error);
+            // runInAction(() => {
+            //     this.status = "error";
+            // });
+        }
     }
 }
 

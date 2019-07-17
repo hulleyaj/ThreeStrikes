@@ -68,7 +68,7 @@ ThreeStrikesStack.navigationOptions = {
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
     />
-  )
+  ),
 };
 
 export default createBottomTabNavigator({

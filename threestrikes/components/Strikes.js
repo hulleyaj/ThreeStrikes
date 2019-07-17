@@ -1,11 +1,10 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { View, Text, StyleSheet } from 'react-native';
-import { STRIKE } from '../models/ObservableThreeStrikesStore';
+import Colors from '../../constants/Colors';
 
 @observer
 class Strikes extends React.Component {
-    howManyStrikesPulled = ({ bucket }) => (3 - bucket.filter(puck => puck === STRIKE).length);
 
     renderStrikes = strikesPulled =>
         [...Array(3)].map((i, index) => {
@@ -17,10 +16,9 @@ class Strikes extends React.Component {
 
     render() {
         const { threeStrikes } = this.props;
-        const strikesPulled = this.howManyStrikesPulled(threeStrikes);
 
         return <View style={ styles.strikes }>
-            { this.renderStrikes(strikesPulled) }
+            { this.renderStrikes(threeStrikes.strikesPulledCount) }
             </View>;
     }
 }
@@ -42,11 +40,11 @@ const styles = StyleSheet.create({
     },
     strikeClear: {
         ...strikeStyle,
-        backgroundColor: 'rgb(150,150,150)'
+        backgroundColor: Colors.disabledRedButton
     },
     strikePulled: {
         ...strikeStyle,
-        backgroundColor: 'rgb(255,60,60)'
+        backgroundColor: Colors.enabledRedButton
     },
     strikeText: {
         color: 'white',

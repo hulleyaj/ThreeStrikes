@@ -1,76 +1,79 @@
-import { observable, computed } from "mobx";
-import Models from '../../helpers/models/Models';
+import {
+  observable, computed, runInAction, action
+} from 'mobx';
 import ThreeStrikesService from '../services/ThreeStrikesService';
+import ThreeStrikesItem from './ThreeStrikesItem';
 
-const price = [2, 8, 5, 7, 1, 6];
 export const STRIKE = -100;
 export const EMPTY = -1;
 
-class ThreeStrikesItem {
-    @observable Id;
-    @observable Item;
-    @observable Price;
+class ObservableThreeStrikesStore {
+  @observable correctGuesses = [];
 
-    constructor(item) {
-        this.Id = item.Id;
-        this.Item = item.Item;
-        this.Price = item.Price;
+  @observable pulledPuck = null;
+
+  @observable itemList = [];
+
+  @observable selectedItem = null;
+
+  @observable bucket = [];
+
+  priceDigits = [];
+
+  threeStrikesService;
+
+  constructor() {
+    this.pulledPuck = EMPTY;
+
+    this.threeStrikesService = new ThreeStrikesService();
+  }
+
+  @computed get isStruckOut() {
+    return this.bucket.indexOf(STRIKE) === -1;
+  }
+
+  @computed get strikesPulledCount() {
+    return (3 - this.bucket.filter(puck => puck === STRIKE).length);
+  }
+
+  @action popPulledPuck = () => this.bucket.splice(this.bucket.indexOf(this.pulledPuck), 1);
+
+  @action pullPuckFromBucket = () => { this.pulledPuck = this.bucket[Math.floor(Math.random() * this.bucket.length)]; }
+
+  @action takeGuess = index => {
+    if (index >= 0 && index < this.priceDigits.length && this.priceDigits[index] === this.pulledPuck) {
+      this.popPulledPuck();
+      this.correctGuesses[index] = this.pulledPuck;
     }
-}
+    this.pulledPuck = EMPTY;
+  }
 
-class ObservableThreeStrikesStore extends Models {
-    initialState = {
-        bucket: [1, 2, 5, 6, 7, 8, STRIKE, STRIKE, STRIKE],
-        correctGuesses: price.map(() => EMPTY),
-        pulledPuck: EMPTY
-    };
+  @action setItem = item => {
+    this.selectedItem = item;
+    this.priceDigits = (item.price.toString()).split('').map(digit => +digit);
+    this.bucket = [STRIKE, STRIKE, STRIKE, ...this.priceDigits];
+    this.correctGuesses = [...Array(this.priceDigits.length)].map(() => EMPTY);
+  }
 
-    @observable bucket = null;
-    @observable correctGuesses = null;
-    @observable pulledPuck = null;
-
-    threeStrikesService;
-
-    constructor(){
-        super();
-        this.reset();
-        this.threeStrikesService = new ThreeStrikesService();
+  getItemsAsync = async itemName => {
+    try {
+      const params = {
+        item: itemName
+      };
+      const urlParams = new URLSearchParams(Object.entries(params));
+      const data = await this.threeStrikesService.get(itemName ? urlParams : '');
+      runInAction(() => {
+        // make a new tab for run in action and do thread.sleeps to show its transactions
+        data.map(item => this.itemList.push(new ThreeStrikesItem(item)));
+      });
+    } catch (error) {
+      console.log('error = ', error);
+      runInAction(() => {
+        // do something with error
+        // this.setItem(this.initialState.item);
+      });
     }
-
-    @computed get isStruckOut() {
-        return this.bucket.indexOf(STRIKE) === -1;
-    }
-
-    popPuck = puck => this.bucket.splice(this.bucket.indexOf(puck), 1);
-
-    pullPuckFromBucket = () => this.pulledPuck = this.bucket[Math.floor(Math.random() * this.bucket.length)];
-
-    takeGuess = index => {
-        if(index >= 0 && index < price.length && price[index] === this.pulledPuck) {
-            this.popPuck(this.pulledPuck);
-            this.correctGuesses[index] = this.pulledPuck;
-        }
-        this.pulledPuck = EMPTY;
-    }
-
-    getItemsAsync = async item => {
-        try {
-            var params = {
-                item
-            };
-            const urlParams = new URLSearchParams(Object.entries(params));
-            const data = await this.threeStrikesService.get(item ? urlParams : '');
-            // runInAction(() => {
-            //     this.countryData = data;
-            // });
-            console.log('woahhh data = ', data);
-        } catch (error) {
-            console.log('error = ', error);
-            // runInAction(() => {
-            //     this.status = "error";
-            // });
-        }
-    }
+  }
 }
 
 const observableThreeStrikesStore = new ObservableThreeStrikesStore();

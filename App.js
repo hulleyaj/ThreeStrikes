@@ -2,23 +2,37 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import PropTypes from 'prop-types';
+import {
+  Platform, StatusBar, StyleSheet, View
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Provider } from "mobx-react";
+import { Provider } from 'mobx-react';
 import observableCounterStore from './counter/models/ObservableCounterStore';
-import observableThreeStrikesStore from'./threestrikes/models/ObservableThreeStrikesStore';
+import observableThreeStrikesStore from './threestrikes/models/ObservableThreeStrikesStore';
+import { ThemeContext } from './context';
+import ScreenContainerTheme from './themes/ScreenContainer';
 
 import AppNavigator from './navigation/AppNavigator';
 
 const stores = {
   counter: observableCounterStore,
   threeStrikes: observableThreeStrikesStore
-}
+};
+
+const ThemeProvider = props => {
+  const { theme, children } = props;
+  return <ThemeContext.Provider value={theme}>
+    {children}
+  </ThemeContext.Provider>;
+};
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const { skipLoadingScreen } = props;
+  const theme = 'dark';
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
+  if (!isLoadingComplete && !skipLoadingScreen) {
     return (
       <AppLoading
         startAsync={loadResourcesAsync}
@@ -26,17 +40,16 @@ export default function App(props) {
         onFinish={() => handleFinishLoading(setLoadingComplete)}
       />
     );
-  } else {
-
-    return (
-      <Provider { ...stores }>
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
-        </Provider>
-    );
   }
+
+  return <Provider {...stores}>
+    <ThemeProvider theme={theme}>
+      <View style={styles(theme).container}>
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <AppNavigator screenProps={{ theme }} />
+      </View>
+    </ThemeProvider>
+  </Provider>;
 }
 
 async function loadResourcesAsync() {
@@ -55,7 +68,7 @@ async function loadResourcesAsync() {
   ]);
 }
 
-function handleLoadingError(error: Error) {
+function handleLoadingError(error) {
   // In this case, you might want to report the error to your error reporting
   // service, for example Sentry
   console.warn(error);
@@ -65,9 +78,15 @@ function handleFinishLoading(setLoadingComplete) {
   setLoadingComplete(true);
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
+App.propTypes = {
+  skipLoadingScreen: PropTypes.bool
+};
+
+ThemeProvider.propTypes = {
+  theme: PropTypes.string,
+  children: PropTypes.any
+};
+
+const styles = theme => StyleSheet.create({
+  ...ScreenContainerTheme(theme)
 });

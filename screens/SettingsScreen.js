@@ -1,14 +1,32 @@
 import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
+import { View, StyleSheet } from 'react-native';
+import { ThemeContext } from '../context';
+import HeaderTheme from '../themes/Header';
+import ScreenContainerTheme from '../themes/ScreenContainer';
+import Settings from '../settings';
 
-export default function SettingsScreen() {
-  /**
-   * Go ahead and delete ExpoConfigView and replace it with your content;
-   * we just wanted to give you a quick view of your config.
-   */
-  return <ExpoConfigView />;
+class SettingsScreen extends React.Component {
+  static navigationOptions = props => {
+    const { screenProps: { theme } } = props;
+    return {
+      title: 'Settings',
+      ...HeaderTheme(theme)
+    };
+  };
+
+  render() {
+    return <ThemeContext.Consumer>
+      {theme =>
+        <View style={styles(theme).container}>
+          <Settings />
+        </View>
+      }
+    </ThemeContext.Consumer>;
+  }
 }
 
-SettingsScreen.navigationOptions = {
-  title: 'app.json',
-};
+export default SettingsScreen;
+
+const styles = theme => StyleSheet.create({
+  ...ScreenContainerTheme(theme),
+});

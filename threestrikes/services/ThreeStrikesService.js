@@ -1,4 +1,5 @@
 const webApiUrl = 'https://localhost:5001/api/ThreeStrikes';
+//const webApiUrl = 'https://threestrikesapi.azurewebsites.net/api/ThreeStrikes';
 
 class ThreeStrikesService {
   get = async urlParams => {
@@ -12,3 +13,13 @@ class ThreeStrikesService {
 }
 
 export default ThreeStrikesService;
+
+
+
+
+
+
+
+
+
+//GET CREDENTIALS ON THE API 

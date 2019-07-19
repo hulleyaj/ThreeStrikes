@@ -6,7 +6,10 @@ const myColors = {
   enabledGreenButton: '#8EFF86',
   disabledGreenButton: '#8E9F86',
   enabledRedButton: '#FF3030',
-  disabledRedButton: '#973030'
+  disabledRedButton: '#973030',
+  iconColorLight: '#CCCCCC',
+  iconColorDark: '#CCCCCC',
+  iconFocused: '#2F95DC'
 };
 
 export default {

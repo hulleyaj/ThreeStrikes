@@ -56,7 +56,7 @@ export default Bucket;
 const puckStyle = {
   width: 150,
   height: 150,
-  borderRadius: '50%',
+  borderRadius: 10,
   alignItems: 'center',
   borderStyle: 'solid',
   borderColor: 'grey',

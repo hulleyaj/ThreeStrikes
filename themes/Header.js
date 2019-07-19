@@ -15,9 +15,8 @@ const headerThemes = {
   }
 };
 
-export default (style, theme) => (
+export default (theme) => (
   {
-    ...style,
     ...headerThemes[theme]
   }
 );

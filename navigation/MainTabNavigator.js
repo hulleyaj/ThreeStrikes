@@ -4,12 +4,14 @@ import {
   createStackNavigator,
   createBottomTabNavigator,
 } from 'react-navigation';
-
+import { Icon } from 'react-native-elements';
+import IconsTheme from '../themes/Icons';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 import ThreeStrikesScreen from '../screens/ThreeStrikesScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import { ThemeContext } from '../context';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -30,7 +32,7 @@ HomeStack.navigationOptions = {
 };
 
 const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+  Links: LinksScreen
 });
 
 LinksStack.navigationOptions = {
@@ -43,37 +45,30 @@ LinksStack.navigationOptions = {
   ),
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
-});
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-    />
-  ),
-};
-
-const ThreeStrikesStack = createStackNavigator({
-  ThreeStrikes: ThreeStrikesScreen
-});
+const ThreeStrikesStack = createStackNavigator(
+  {
+    ThreeStrikes: ThreeStrikesScreen,
+    Settings: SettingsScreen
+  },
+  { mode: 'modal' }
+);
 
 ThreeStrikesStack.navigationOptions = {
   tabBarLabel: 'Three Strikes',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-    />
-  ),
+  tabBarIcon: ({ focused }) =>
+    <ThemeContext.Consumer>
+      { theme =>
+        <Icon
+          name="tag"
+          type="feather"
+          {...IconsTheme(theme, focused)}
+        />
+    }
+    </ThemeContext.Consumer>
 };
 
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  SettingsStack,
   ThreeStrikesStack
 });

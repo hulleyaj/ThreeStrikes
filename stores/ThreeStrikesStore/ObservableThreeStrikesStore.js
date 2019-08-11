@@ -1,8 +1,8 @@
 import {
   observable, computed, runInAction, action
 } from 'mobx';
-import ThreeStrikesService from '../services/ThreeStrikesService';
-import ThreeStrikesItem from './ThreeStrikesItem';
+import ThreeStrikesService from './services/ThreeStrikesService';
+import ThreeStrikesItem from './models/ThreeStrikesItem';
 
 export const STRIKE = -100;
 export const EMPTY = -1;
@@ -10,7 +10,7 @@ export const EMPTY = -1;
 class ObservableThreeStrikesStore {
   @observable correctGuesses = [];
 
-  @observable pulledPuck = null;
+  @observable pulledPuck = EMPTY;
 
   @observable itemList = [];
 
@@ -23,8 +23,6 @@ class ObservableThreeStrikesStore {
   threeStrikesService;
 
   constructor() {
-    this.pulledPuck = EMPTY;
-
     this.threeStrikesService = new ThreeStrikesService();
   }
 

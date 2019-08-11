@@ -1,4 +1,4 @@
-import observableThreeStrikesStore, { STRIKE, EMPTY } from '../../../threestrikes/models/ObservableThreeStrikesStore';
+import observableThreeStrikesStore, { STRIKE, EMPTY } from '../../../stores/ThreeStrikesStore/ObservableThreeStrikesStore';
 
 beforeEach(() => {
     observableThreeStrikesStore.reset();

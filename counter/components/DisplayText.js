@@ -4,9 +4,9 @@ import { observer } from 'mobx-react';
 
 @observer
 class DisplayText extends React.Component {
-    render() {
-        return <Text>{ `Current Count: ${ this.props.counter.count}` }</Text>; 
-    }
+  render() {
+    return <Text>{ `Current Count: ${this.props.counter.count}` }</Text>;
+  }
 }
 
 export default DisplayText;

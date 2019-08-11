@@ -4,7 +4,7 @@ import {
   View, Text, Button, StyleSheet
 } from 'react-native';
 import { observer } from 'mobx-react';
-import { STRIKE, EMPTY } from '../models/ObservableThreeStrikesStore';
+import { STRIKE, EMPTY } from '../../../stores/ThreeStrikesStore/ObservableThreeStrikesStore';
 
 @observer
 class Bucket extends React.Component {
@@ -22,23 +22,23 @@ class Bucket extends React.Component {
   }
 
   render() {
-    const { threeStrikes } = this.props;
-    const pulledPuckText = this.pulledStrike(threeStrikes) ? 'X' : threeStrikes.pulledPuck;
-    const pulledPuckStyle = this.pulledStrike(threeStrikes) ? styles.pulledPuckStrike : styles.pulledPuck;
-    const buttonText = this.pulledStrike(threeStrikes) ? 'discard strike' : 'pull puck from bucket';
-    const buttonColor = (this.awaitingPulledPuck(threeStrikes) || this.pulledStrike(threeStrikes)) ? 'rgb(22,186,232)' : 'rgb(150,150,150)';
+    const { threeStrikesStore } = this.props;
+    const pulledPuckText = this.pulledStrike(threeStrikesStore) ? 'X' : threeStrikesStore.pulledPuck;
+    const pulledPuckStyle = this.pulledStrike(threeStrikesStore) ? styles.pulledPuckStrike : styles.pulledPuck;
+    const buttonText = this.pulledStrike(threeStrikesStore) ? 'discard strike' : 'pull puck from bucket';
+    const buttonColor = (this.awaitingPulledPuck(threeStrikesStore) || this.pulledStrike(threeStrikesStore)) ? 'rgb(22,186,232)' : 'rgb(150,150,150)';
 
-    return <View style={styles.bucket}>
+    return <View style={ styles.bucket }>
       <Button
-        title={buttonText}
-        onPress={() => this.onButtonClick(threeStrikes)}
-        color={buttonColor}
+        title={ buttonText }
+        onPress={ () => this.onButtonClick(threeStrikesStore) }
+        color={ buttonColor }
       />
       {
-        threeStrikes.pulledPuck !== EMPTY
-          ? <View style={pulledPuckStyle}>
-            <Text style={styles.pulledPuckText}>
-              {pulledPuckText}
+        threeStrikesStore.pulledPuck !== EMPTY
+          ? <View style={ pulledPuckStyle }>
+            <Text style={ styles.pulledPuckText }>
+              { pulledPuckText }
             </Text>
           </View>
           : null
@@ -48,7 +48,7 @@ class Bucket extends React.Component {
 }
 
 Bucket.propTypes = {
-  threeStrikes: PropTypes.object
+  threeStrikesStore: PropTypes.object
 };
 
 export default Bucket;

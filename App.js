@@ -9,48 +9,43 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { Provider } from 'mobx-react';
 import observableCounterStore from './counter/models/ObservableCounterStore';
-import observableThreeStrikesStore from './threestrikes/models/ObservableThreeStrikesStore';
-import { ThemeContext } from './context';
+import observableThreeStrikesStore from './stores/ThreeStrikesStore/ObservableThreeStrikesStore';
+import ObservableAppStore from './stores/AppStore/ObservableAppStore';
 import ScreenContainerTheme from './themes/ScreenContainer';
 
 import AppNavigator from './navigation/AppNavigator';
 
 const stores = {
   counter: observableCounterStore,
-  threeStrikes: observableThreeStrikesStore
+  threeStrikesStore: observableThreeStrikesStore,
+  appStore: ObservableAppStore
 };
 
-const ThemeProvider = props => {
-  const { theme, children } = props;
-  return <ThemeContext.Provider value={theme}>
-    {children}
-  </ThemeContext.Provider>;
-};
-
-export default function App(props) {
+const App = props => {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const { skipLoadingScreen } = props;
-  const theme = 'dark';
 
   if (!isLoadingComplete && !skipLoadingScreen) {
     return (
       <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
+        startAsync={ loadResourcesAsync }
+        onError={ handleLoadingError }
+        onFinish={ () => handleFinishLoading(setLoadingComplete) }
       />
     );
   }
 
-  return <Provider {...stores}>
-    <ThemeProvider theme={theme}>
-      <View style={styles(theme).container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator screenProps={{ theme }} />
-      </View>
-    </ThemeProvider>
+  const { theme } = stores.appStore;
+
+  return <Provider { ...stores }>
+    <View style={ styles(theme).container }>
+      { Platform.OS === 'ios' && <StatusBar barStyle="default" /> }
+      <AppNavigator screenProps={ { theme } } />
+    </View>
   </Provider>;
-}
+};
+
+export default App;
 
 async function loadResourcesAsync() {
   await Promise.all([
@@ -65,6 +60,7 @@ async function loadResourcesAsync() {
       // remove this if you are not using it in your app
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
+    stores.appStore.getTheme()
   ]);
 }
 
@@ -80,11 +76,6 @@ function handleFinishLoading(setLoadingComplete) {
 
 App.propTypes = {
   skipLoadingScreen: PropTypes.bool
-};
-
-ThemeProvider.propTypes = {
-  theme: PropTypes.string,
-  children: PropTypes.any
 };
 
 const styles = theme => StyleSheet.create({

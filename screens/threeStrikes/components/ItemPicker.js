@@ -4,34 +4,34 @@ import {
   View, Text, StyleSheet, TouchableOpacity
 } from 'react-native';
 import { observer } from 'mobx-react';
-import Colors from '../../constants/Colors';
+import Colors from '../../../constants/Colors';
 
 @observer
 class ItemPicker extends React.Component {
   renderSelectableItems = ({ itemList, setItem }) =>
     itemList.map((item, index) =>
       <TouchableOpacity
-        key={index}
-        style={styles.selectableItem}
-        onPress={() => setItem(item)}
+        key={ index }
+        style={ styles.selectableItem }
+        onPress={ () => setItem(item) }
       >
-        <Text style={styles.selectableItemText}>{item.item}</Text>
+        <Text style={ styles.selectableItemText }>{ item.item }</Text>
       </TouchableOpacity>);
 
   render() {
-    const { threeStrikes } = this.props;
+    const { threeStrikesStore } = this.props;
 
-    return <View style={styles.container}>
-      <Text style={styles.headerText}>SELECT ITEM</Text>
-      <View style={styles.selectableItemContainer}>
-        {this.renderSelectableItems(threeStrikes)}
+    return <View style={ styles.container }>
+      <Text style={ styles.headerText }>SELECT ITEM</Text>
+      <View style={ styles.selectableItemContainer }>
+        { this.renderSelectableItems(threeStrikesStore) }
       </View>
     </View>;
   }
 }
 
 ItemPicker.propTypes = {
-  threeStrikes: PropTypes.object
+  threeStrikesStore: PropTypes.object
 };
 
 export default ItemPicker;

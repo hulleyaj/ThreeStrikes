@@ -9,9 +9,8 @@ import IconsTheme from '../themes/Icons';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import ThreeStrikesScreen from '../screens/ThreeStrikesScreen';
-import SettingsScreen from '../screens/SettingsScreen';
-import { ThemeContext } from '../context';
+import ThreeStrikesScreen from '../screens/threeStrikes/ThreeStrikesScreen';
+import SettingsScreen from '../screens/settings/SettingsScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -21,7 +20,7 @@ HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
-      focused={focused}
+      focused={ focused }
       name={
         Platform.OS === 'ios'
           ? `ios-information-circle${focused ? '' : '-outline'}`
@@ -39,8 +38,8 @@ LinksStack.navigationOptions = {
   tabBarLabel: 'Links',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      focused={ focused }
+      name={ Platform.OS === 'ios' ? 'ios-link' : 'md-link' }
     />
   ),
 };
@@ -53,19 +52,18 @@ const ThreeStrikesStack = createStackNavigator(
   { mode: 'modal' }
 );
 
-ThreeStrikesStack.navigationOptions = {
-  tabBarLabel: 'Three Strikes',
-  tabBarIcon: ({ focused }) =>
-    <ThemeContext.Consumer>
-      { theme =>
-        <Icon
-          name="tag"
-          type="feather"
-          {...IconsTheme(theme, focused)}
-        />
-    }
-    </ThemeContext.Consumer>
-};
+ThreeStrikesStack.navigationOptions = ({ screenProps }) => (
+  {
+    tabBarLabel: 'Three Strikes',
+    tabBarIcon: ({ focused }) => (
+      <Icon
+        name="tag"
+        type="feather"
+        { ...IconsTheme(screenProps.theme, focused) }
+      />
+    )
+  }
+);
 
 export default createBottomTabNavigator({
   HomeStack,

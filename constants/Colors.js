@@ -1,14 +1,34 @@
 const tintColor = '#2f95dc';
 
-const myColors = {
-  textColorLight: '#F1F1F1',
-  textColorDark: '#202020',
+const colorPalette = {
+  lightBlack: '#202020',
+  lightGray: '#CCCCCC',
+  gray: '#808080',
+  darkGray: '#404040',
+  darkWhite: '#F3F3F3'
+};
+
+const lightThemeColors = {
+  textColorLight: colorPalette.lightBlack,
+  iconColorLight: colorPalette.gray,
+  tabBarLight: colorPalette.darkWhite,
+  headerLight: colorPalette.darkWhite,
+  backgroundLight: '#FFFFFF'
+};
+
+const darkThemeColors = {
+  textColorDark: colorPalette.lightGray,
+  iconColorDark: colorPalette.lightGray,
+  tabBarDark: colorPalette.darkGray,
+  headerDark: colorPalette.darkGray,
+  backgroundDark: '#303030'
+};
+
+const componentColors = {
   enabledGreenButton: '#8EFF86',
   disabledGreenButton: '#8E9F86',
   enabledRedButton: '#FF3030',
   disabledRedButton: '#973030',
-  iconColorLight: '#CCCCCC',
-  iconColorDark: '#CCCCCC',
   iconFocused: '#2F95DC'
 };
 
@@ -23,5 +43,8 @@ export default {
   warningText: '#666804',
   noticeBackground: tintColor,
   noticeText: '#fff',
-  ...myColors
+  ...colorPalette,
+  ...lightThemeColors,
+  ...darkThemeColors,
+  ...componentColors
 };

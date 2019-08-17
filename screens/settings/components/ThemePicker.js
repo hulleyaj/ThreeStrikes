@@ -9,7 +9,6 @@ import { LIGHT, DARK } from '../../../constants/Themes';
 @observer
 class ThemePicker extends React.Component {
   render() {
-    console.log('themepicker props = ', this.props);
     const { appStore } = this.props;
 
     return <View>

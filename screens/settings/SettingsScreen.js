@@ -2,25 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import HeaderTheme from '../../themes/Header';
-import ScreenContainerTheme from '../../themes/ScreenContainer';
 import ThemePicker from './components/ThemePicker';
+import { LIGHT, DARK } from '../../constants/Themes'
+import Colors from '../../constants/Colors';;
 
 @inject('appStore')
 @observer
 class SettingsScreen extends React.Component {
   static navigationOptions = props => {
-    const { screenProps: { theme } } = props;
     return {
-      title: 'Settings',
-      ...HeaderTheme(theme)
+      title: 'Settings'
     };
   };
 
   render() {
-    const { appStore } = this.props;
+    const { appStore: { theme } } = this.props;
 
-    return <View style={ styles(appStore.theme).container }>
+    return <View style={ styles[theme] }>
       <ThemePicker { ...this.props } />
     </View>;
   }
@@ -33,6 +31,13 @@ SettingsScreen.propTypes = {
 
 export default SettingsScreen;
 
-const styles = theme => StyleSheet.create({
-  ...ScreenContainerTheme(theme),
+const styles = StyleSheet.create({
+  [LIGHT]: {
+    flex: 1,
+    backgroundColor: Colors.backgroundLight
+  },
+  [DARK]: {
+    flex: 1,
+    backgroundColor: Colors.backgroundDark
+  }
 });

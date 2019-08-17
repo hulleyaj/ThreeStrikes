@@ -2,30 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import { inject, observer } from 'mobx-react';
-import { Icon } from 'react-native-elements';
-import ScreenContainerTheme from '../../themes/ScreenContainer';
-import HeaderTheme from '../../themes/Header';
-import IconsTheme from '../../themes/Icons';
+import Icon from '../../components/Icon';
 import ItemPicker from './components/ItemPicker';
 import Strikes from './components/Strikes';
 import Guesses from './components/Guesses';
 import Bucket from './components/Bucket';
+import { LIGHT, DARK } from '../../constants/Themes';
+import Colors from '../../constants/Colors';
 
-@inject('threeStrikesStore', 'appStore')
+@inject('threeStrikesStore')
 @observer
 class ThreeStrikesScreen extends React.Component {
   static navigationOptions = props => {
-    console.log('props = ', props)
+    const { screenProps, navigation } = props;
 
-    const { screenProps: { theme }, navigation } = props;
     return {
       title: 'Three Strikes',
-      ...HeaderTheme(theme),
       headerRight: (
         <Icon
           name="settings"
-          type="feather"
-          { ...IconsTheme(theme) }
+          screenProps={ screenProps }
           containerStyle={ { paddingRight: 10 } }
           onPress={ () => navigation.navigate('Settings') }
         />
@@ -40,9 +36,9 @@ class ThreeStrikesScreen extends React.Component {
   }
 
   render() {
-    const { appStore, threeStrikesStore } = this.props;
+    const { screenProps: { theme }, threeStrikesStore } = this.props;
 
-    return <View style={ styles(appStore.theme).container }>
+    return <View style={ styles[theme] }>
       { threeStrikesStore.selectedItem
         ? <View>
           <Strikes { ...this.props } />
@@ -56,12 +52,19 @@ class ThreeStrikesScreen extends React.Component {
 }
 
 ThreeStrikesScreen.propTypes = {
-  appStore: PropTypes.object,
+  screenProps: PropTypes.object,
   threeStrikesStore: PropTypes.object
 };
 
 export default ThreeStrikesScreen;
 
-const styles = theme => StyleSheet.create({
-  ...ScreenContainerTheme(theme),
+const styles = StyleSheet.create({
+  [LIGHT]: {
+    flex: 1,
+    backgroundColor: Colors.backgroundLight
+  },
+  [DARK]: {
+    flex: 1,
+    backgroundColor: Colors.backgroundDark
+  }
 });

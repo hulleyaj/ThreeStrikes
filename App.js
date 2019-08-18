@@ -16,6 +16,10 @@ import { LIGHT, DARK } from './constants/Themes';
 
 import AppNavigator from './navigation/AppNavigator';
 
+
+// ALLEN FIX BUG WHERE I CAN 'DISCARD STRIKE' BY JUST CLICKING A NUMBER SQUARE AND IT DOESNT COUNT
+// ALLEN FIX BUG WHERE NAVIGATING TO SETTINGS SCREEN BREAKS THE HEADER ICONS IN THREE STRIKES SCREEN
+
 const stores = {
   counter: observableCounterStore,
   threeStrikesStore: observableThreeStrikesStore,

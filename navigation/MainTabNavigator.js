@@ -5,71 +5,28 @@ import {
 } from 'react-navigation';
 import Icon from '../components/Icon';
 import TabBar from '../components/TabBar';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
 import ThreeStrikesScreen from '../screens/threeStrikes/ThreeStrikesScreen';
+import ItemPickerScreen from '../screens/itemPicker/ItemPickerScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import { LIGHT, DARK } from '../constants/Themes';
 import Colors from '../constants/Colors';
-
-const HomeStack = createStackNavigator({
-  Home: HomeScreen,
-});
-
-HomeStack.navigationOptions = ({ screenProps }) => (
-  {
-    tabBarLabel: 'Home',
-    tabBarIcon: ({ focused }) => (
-      <Icon
-        focused={ focused }
-        name="info"
-        screenProps={ screenProps }
-        containerStyle={ { marginBottom: -3 } }
-      />
-    ),
-  }
-);
 
 // name={
 //   Platform.OS === 'ios'
 //     ? `ios-information-circle${focused ? '' : '-outline'}`
 //     : 'md-information-circle'
 // }
-
-const LinksStack = createStackNavigator({
-  Links: LinksScreen
-});
-
-LinksStack.navigationOptions = ({ screenProps }) => (
-  {
-    tabBarLabel: 'Links',
-    tabBarIcon: ({ focused }) => (
-      <Icon
-        focused={ focused }
-        name="link"
-        screenProps={ screenProps }
-        containerStyle={ { marginBottom: -3 } }
-      />
-    ),
-  }
-);
 // name={ Platform.OS === 'ios' ? 'ios-link' : 'md-link' }
 
-//headerMode differs ios and android
+// headerMode differs ios and android
 const ThreeStrikesStack = createStackNavigator(
   {
     ThreeStrikes: ThreeStrikesScreen,
-    Settings: SettingsScreen
+    ItemPicker: ItemPickerScreen
   },
   {
     mode: 'modal',
-    defaultNavigationOptions: props => {
-      const { screenProps: { theme } } = props;
-
-      return {
-        ...headerStyles[theme],
-      };
-    }
+    defaultNavigationOptions: ({ screenProps: { theme } }) => headerStyles[theme]
   }
 );
 
@@ -87,10 +44,32 @@ ThreeStrikesStack.navigationOptions = ({ screenProps }) => (
   }
 );
 
+const SettingsStack = createStackNavigator(
+  {
+    Settings: SettingsScreen,
+  },
+  {
+    defaultNavigationOptions: ({ screenProps: { theme } }) => headerStyles[theme]
+  }
+);
+
+SettingsStack.navigationOptions = ({ screenProps }) => (
+  {
+    tabBarLabel: 'Settings',
+    tabBarIcon: ({ focused }) => (
+      <Icon
+        focused={ focused }
+        name="settings"
+        screenProps={ screenProps }
+        containerStyle={ { marginBottom: -3 } }
+      />
+    ),
+  }
+);
+
 export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  ThreeStrikesStack
+  ThreeStrikesStack,
+  SettingsStack
 },
 {
   tabBarComponent: props => <TabBar { ...props } />

@@ -8,30 +8,38 @@ import Colors from '../../../constants/Colors';
 
 @observer
 class ItemPicker extends React.Component {
-  renderSelectableItems = ({ itemList, setItem }) =>
+  selectableItemOnPress(item) {
+    const { threeStrikesStore: { setItem }, navigation } = this.props;
+
+    setItem(item);
+    navigation.pop();
+  }
+
+  renderSelectableItems = ({ threeStrikesStore: { itemList } }) =>
     itemList.map((item, index) =>
       <TouchableOpacity
         key={ index }
         style={ styles.selectableItem }
-        onPress={ () => setItem(item) }
+        onPress={ () => this.selectableItemOnPress(item) }
       >
         <Text style={ styles.selectableItemText }>{ item.item }</Text>
       </TouchableOpacity>);
 
   render() {
-    const { threeStrikesStore } = this.props;
-
     return <View style={ styles.container }>
       <Text style={ styles.headerText }>SELECT ITEM</Text>
       <View style={ styles.selectableItemContainer }>
-        { this.renderSelectableItems(threeStrikesStore) }
+        { this.renderSelectableItems(this.props) }
       </View>
     </View>;
   }
 }
 
 ItemPicker.propTypes = {
-  threeStrikesStore: PropTypes.object
+  threeStrikesStore: PropTypes.object,
+  navigation: PropTypes.shape({
+    pop: PropTypes.func
+  })
 };
 
 export default ItemPicker;

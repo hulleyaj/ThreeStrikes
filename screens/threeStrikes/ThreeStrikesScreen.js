@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import Icon from '../../components/Icon';
-import ItemPicker from './components/ItemPicker';
 import Strikes from './components/Strikes';
 import Guesses from './components/Guesses';
 import Bucket from './components/Bucket';
@@ -20,33 +19,29 @@ class ThreeStrikesScreen extends React.Component {
       title: 'Three Strikes',
       headerRight: (
         <Icon
-          name="settings"
+          name="rotate-ccw"
           screenProps={ screenProps }
           containerStyle={ { paddingRight: 10 } }
-          onPress={ () => navigation.navigate('Settings') }
+          onPress={ () => navigation.navigate('ItemPicker') }
         />
       )
     };
   };
 
   componentDidMount() {
-    const { threeStrikesStore } = this.props;
-
-    threeStrikesStore.getItemsAsync();
+    const { threeStrikesStore, navigation } = this.props;
+    if (!threeStrikesStore.selectedItem) {
+      navigation.navigate('ItemPicker');
+    }
   }
 
   render() {
     const { screenProps: { theme }, threeStrikesStore } = this.props;
 
-    return <View style={ styles[theme] }>
-      { threeStrikesStore.selectedItem
-        ? <View>
-          <Strikes { ...this.props } />
-          <Guesses { ...this.props } />
-          <Bucket { ...this.props } />
-        </View>
-        : <ItemPicker { ...this.props } />
-      }
+    return threeStrikesStore.selectedItem && <View style={ StyleSheet.flatten([styles.container, styles[theme]]) }>
+      <Strikes { ...this.props } />
+      <Guesses { ...this.props } />
+      <Bucket { ...this.props } />
     </View>;
   }
 }
@@ -59,12 +54,13 @@ ThreeStrikesScreen.propTypes = {
 export default ThreeStrikesScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   [LIGHT]: {
-    flex: 1,
     backgroundColor: Colors.backgroundLight
   },
   [DARK]: {
-    flex: 1,
     backgroundColor: Colors.backgroundDark
   }
 });

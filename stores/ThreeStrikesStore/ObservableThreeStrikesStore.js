@@ -54,6 +54,8 @@ class ObservableThreeStrikesStore {
   }
 
   getItemsAsync = async itemName => {
+    if (this.itemList.length > 0) return;
+
     try {
       const params = {
         item: itemName

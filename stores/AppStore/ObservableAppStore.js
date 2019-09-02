@@ -9,10 +9,10 @@ class ObservableAppStore {
   @action getTheme = async () => {
     if (!this.theme) {
       try {
-        const theme = await AsyncStorage.getItem(THEME_KEY);
-        this.theme = theme;
+        this.theme = await AsyncStorage.getItem(THEME_KEY);
       } catch (e) {
         // uhhhh
+        console.log('error getting theme');
       }
     }
 
@@ -26,10 +26,11 @@ class ObservableAppStore {
   @action setTheme = async newTheme => {
     if (newTheme === LIGHT || newTheme === DARK) {
       try {
-        // await AsyncStorage.setItem(THEME_KEY, newTheme);
+        await AsyncStorage.setItem(THEME_KEY, newTheme);
         this.theme = newTheme;
       } catch (e) {
         // uhhhh
+        console.log('error setting theme');
       }
     }
   }

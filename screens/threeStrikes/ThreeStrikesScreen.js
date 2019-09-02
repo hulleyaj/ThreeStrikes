@@ -47,7 +47,9 @@ class ThreeStrikesScreen extends React.Component {
 }
 
 ThreeStrikesScreen.propTypes = {
-  screenProps: PropTypes.object,
+  screenProps: PropTypes.shape({
+    theme: PropTypes.string
+  }),
   threeStrikesStore: PropTypes.object
 };
 

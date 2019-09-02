@@ -26,9 +26,10 @@ const darkThemeColors = {
 
 const componentColors = {
   enabledGreenButton: '#8EFF86',
-  disabledGreenButton: '#8E9F86',
   enabledRedButton: '#FF3030',
   disabledRedButton: '#973030',
+  enabledOrangeButton: '#ED9022',
+  disabledOrangeButton: '#C47200',
   iconFocused: '#2F95DC'
 };
 

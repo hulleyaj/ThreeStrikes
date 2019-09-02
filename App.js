@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Provider, observer } from 'mobx-react';
-import observableCounterStore from './counter/models/ObservableCounterStore';
+import observableCounterStore from './stores/CounterStore/ObservableCounterStore';
 import observableThreeStrikesStore from './stores/ThreeStrikesStore/ObservableThreeStrikesStore';
 import ObservableAppStore from './stores/AppStore/ObservableAppStore';
 import Colors from './constants/Colors';
@@ -16,12 +16,8 @@ import { LIGHT, DARK } from './constants/Themes';
 
 import AppNavigator from './navigation/AppNavigator';
 
-
-// ALLEN FIX BUG WHERE I CAN 'DISCARD STRIKE' BY JUST CLICKING A NUMBER SQUARE AND IT DOESNT COUNT
-// ALLEN FIX BUG WHERE NAVIGATING TO SETTINGS SCREEN BREAKS THE HEADER ICONS IN THREE STRIKES SCREEN
-
 const stores = {
-  counter: observableCounterStore,
+  counterStore: observableCounterStore,
   threeStrikesStore: observableThreeStrikesStore,
   appStore: ObservableAppStore
 };

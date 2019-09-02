@@ -7,6 +7,7 @@ import Icon from '../components/Icon';
 import TabBar from '../components/TabBar';
 import ThreeStrikesScreen from '../screens/threeStrikes/ThreeStrikesScreen';
 import ItemPickerScreen from '../screens/itemPicker/ItemPickerScreen';
+import CounterScreen from '../screens/counter/CounterScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
 import { LIGHT, DARK } from '../constants/Themes';
 import Colors from '../constants/Colors';
@@ -44,9 +45,32 @@ ThreeStrikesStack.navigationOptions = ({ screenProps }) => (
   }
 );
 
+const CounterStack = createStackNavigator(
+  {
+    Counter: CounterScreen
+  },
+  {
+    defaultNavigationOptions: ({ screenProps: { theme } }) => headerStyles[theme]
+  }
+);
+
+CounterStack.navigationOptions = ({ screenProps }) => (
+  {
+    tabBarLabel: 'Counter',
+    tabBarIcon: ({ focused }) => (
+      <Icon
+        focused={ focused }
+        name="plus"
+        screenProps={ screenProps }
+        containerStyle={ { marginBottom: -3 } }
+      />
+    )
+  }
+);
+
 const SettingsStack = createStackNavigator(
   {
-    Settings: SettingsScreen,
+    Settings: SettingsScreen
   },
   {
     defaultNavigationOptions: ({ screenProps: { theme } }) => headerStyles[theme]
@@ -63,12 +87,13 @@ SettingsStack.navigationOptions = ({ screenProps }) => (
         screenProps={ screenProps }
         containerStyle={ { marginBottom: -3 } }
       />
-    ),
+    )
   }
 );
 
 export default createBottomTabNavigator({
   ThreeStrikesStack,
+  CounterStack,
   SettingsStack
 },
 {

@@ -4,39 +4,50 @@ import {
   View, Text, StyleSheet, TouchableOpacity
 } from 'react-native';
 import { observer } from 'mobx-react';
+import { LIGHT, DARK } from '../../../constants/Themes';
 import Colors from '../../../constants/Colors';
 
 @observer
 class ItemPicker extends React.Component {
-  selectableItemOnPress(item) {
-    const { threeStrikesStore: { setItem }, navigation } = this.props;
-
+  selectableItemOnPress = (item, setItem, pop) => {
     setItem(item);
-    navigation.pop();
+    pop();
   }
 
-  renderSelectableItems = ({ threeStrikesStore: { itemList } }) =>
+  renderSelectableItems = (itemList, setItem, pop) =>
     itemList.map((item, index) =>
       <TouchableOpacity
         key={ index }
         style={ styles.selectableItem }
-        onPress={ () => this.selectableItemOnPress(item) }
+        onPress={ () => this.selectableItemOnPress(item, setItem, pop) }
       >
         <Text style={ styles.selectableItemText }>{ item.item }</Text>
       </TouchableOpacity>);
 
   render() {
+    const {
+      threeStrikesStore: { itemList, setItem },
+      screenProps: { theme },
+      navigation: { pop }
+    } = this.props;
+
     return <View style={ styles.container }>
-      <Text style={ styles.headerText }>SELECT ITEM</Text>
+      <Text style={ StyleSheet.flatten([headerStyles.text, headerStyles[theme]]) }>SELECT ITEM</Text>
       <View style={ styles.selectableItemContainer }>
-        { this.renderSelectableItems(this.props) }
+        { this.renderSelectableItems(itemList, setItem, pop) }
       </View>
     </View>;
   }
 }
 
 ItemPicker.propTypes = {
-  threeStrikesStore: PropTypes.object,
+  threeStrikesStore: PropTypes.shape({
+    itemList: PropTypes.array,
+    setItem: PropTypes.func
+  }),
+  screenProps: PropTypes.shape({
+    theme: PropTypes.string
+  }),
   navigation: PropTypes.shape({
     pop: PropTypes.func
   })
@@ -49,10 +60,6 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center'
   },
-  headerText: {
-    color: Colors.textColorLight,
-    fontSize: 20
-  },
   selectableItemContainer: {
     width: '70%'
   },
@@ -62,10 +69,22 @@ const styles = StyleSheet.create({
     minHeight: 36,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 10,
+    marginVertical: 10
   },
   selectableItemText: {
-    color: Colors.textColorDark,
-    fontSize: 18
+    fontSize: 18,
+    color: Colors.textColorLight
+  }
+});
+
+const headerStyles = StyleSheet.create({
+  text: {
+    fontSize: 20
+  },
+  [LIGHT]: {
+    color: Colors.textColorLight
+  },
+  [DARK]: {
+    color: Colors.textColorDark
   }
 });

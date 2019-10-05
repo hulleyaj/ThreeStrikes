@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import Colors from '../../../constants/Colors';
-import { LIGHT, DARK } from '../../../constants/Themes';
+import PropTypes from 'prop-types';
+import {
+  View, Text, TouchableOpacity
+} from 'react-native';
 
 class ReactCounter extends React.Component {
   constructor(props) {
@@ -13,57 +14,40 @@ class ReactCounter extends React.Component {
   }
 
   render() {
-    const { screenProps: { theme } } = this.props;
+    const {
+      screenProps: { theme },
+      counterStyles,
+      counterTextStyles
+    } = this.props;
     const { count } = this.state;
 
-    return <View style={ styles.container }>
-      <TouchableOpacity
-        onPress={ () => { this.setState({ count: count - 1 }); } }
-        style={ styles.button }
-      >
-        <Text style={ styles.buttonText }>-</Text>
-      </TouchableOpacity>
-      <Text style={ textStyles[theme] }>{ count }</Text>
-      <TouchableOpacity
-        onPress={ () => { this.setState({ count: count + 1 }); } }
-        style={ styles.button }
-      >
-        <Text style={ styles.buttonText }>+</Text>
-      </TouchableOpacity>
+    return <View style={ counterStyles.container }>
+      <Text style={ counterTextStyles[theme] }>React Counter</Text>
+      <View style={ counterStyles.counterContainer }>
+        <TouchableOpacity
+          onPress={ () => { this.setState({ count: count - 1 }); } }
+          style={ counterStyles.button }
+        >
+          <Text style={ counterStyles.buttonText }>-</Text>
+        </TouchableOpacity>
+        <Text style={ counterTextStyles[theme] }>{ count }</Text>
+        <TouchableOpacity
+          onPress={ () => { this.setState({ count: count + 1 }); } }
+          style={ counterStyles.button }
+        >
+          <Text style={ counterStyles.buttonText }>+</Text>
+        </TouchableOpacity>
+      </View>
     </View>;
   }
 }
 
+ReactCounter.propTypes = {
+  screenProps: PropTypes.shape({
+    theme: PropTypes.string
+  }),
+  counterStyles: PropTypes.object,
+  counterTextStyles: PropTypes.object
+};
+
 export default ReactCounter;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center'
-  },
-  button: {
-    backgroundColor: Colors.enabledGreenButton,
-    borderRadius: 5,
-    width: 50,
-    height: 50,
-    alignItems: 'center'
-  },
-  buttonText: {
-    fontSize: 36,
-    color: Colors.textColorLight
-  }
-});
-
-const textStyles = StyleSheet.create({
-  [LIGHT]: {
-    fontSize: 36,
-    color: Colors.textColorLight
-  },
-  [DARK]: {
-    marginLeft: 20,
-    marginRight: 20,
-    fontSize: 36,
-    color: Colors.textColorDark
-  }
-});

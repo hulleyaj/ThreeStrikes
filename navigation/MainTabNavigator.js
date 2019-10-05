@@ -9,6 +9,7 @@ import ThreeStrikesScreen from '../screens/threeStrikes/ThreeStrikesScreen';
 import ItemPickerScreen from '../screens/itemPicker/ItemPickerScreen';
 import CounterScreen from '../screens/counter/CounterScreen';
 import SettingsScreen from '../screens/settings/SettingsScreen';
+import NativeScreen from '../screens/native/NativeScreen';
 import { LIGHT, DARK } from '../constants/Themes';
 import Colors from '../constants/Colors';
 
@@ -91,10 +92,34 @@ SettingsStack.navigationOptions = ({ screenProps }) => (
   }
 );
 
+const NativeStack = createStackNavigator(
+  {
+    Native: NativeScreen
+  },
+  {
+    defaultNavigationOptions: ({ screenProps: { theme } }) => headerStyles[theme]
+  }
+);
+
+NativeStack.navigationOptions = ({ screenProps }) => (
+  {
+    tabBarLabel: 'Native',
+    tabBarIcon: ({ focused }) => (
+      <Icon
+        focused={ focused }
+        name="package"
+        screenProps={ screenProps }
+        containerStyle={ { marginBottom: -3 } }
+      />
+    )
+  }
+);
+
 export default createBottomTabNavigator({
   ThreeStrikesStack,
   CounterStack,
-  SettingsStack
+  SettingsStack,
+  NativeStack
 },
 {
   tabBarComponent: props => <TabBar { ...props } />

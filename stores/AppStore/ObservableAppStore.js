@@ -1,6 +1,5 @@
 import { action, observable } from 'mobx';
 import { AsyncStorage } from 'react-native';
-// import * as Battery from 'expo-battery';
 import { THEME_KEY } from '../../constants/AsyncStorageKeys';
 import { LIGHT, DARK } from '../../constants/Themes';
 

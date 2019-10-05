@@ -21,7 +21,7 @@ class ThreeStrikesScreen extends React.Component {
         <Icon
           name="rotate-ccw"
           screenProps={ screenProps }
-          containerStyle={ { paddingRight: 10 } }
+          style={ { marginRight: 15 } }
           onPress={ () => navigation.navigate('ItemPicker') }
         />
       )

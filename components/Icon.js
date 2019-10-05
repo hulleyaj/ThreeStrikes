@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Icon as NativeIcon } from 'react-native-elements';
+import { Feather } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import { LIGHT, DARK } from '../constants/Themes';
 
@@ -9,9 +9,9 @@ const Icon = ({
   screenProps,
   focused,
   ...additionalProps
-}) => (<NativeIcon
-  type="feather"
+}) => (<Feather
   name={ name }
+  size={ 24 }
   { ...styles(focused)[screenProps.theme] }
   { ...additionalProps }
 />);

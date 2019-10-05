@@ -6,7 +6,7 @@ import * as Font from 'expo-font';
 import {
   Platform, StatusBar, StyleSheet, View
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, Feather } from '@expo/vector-icons';
 import { Provider, observer } from 'mobx-react';
 import observableCounterStore from './stores/CounterStore/ObservableCounterStore';
 import observableThreeStrikesStore from './stores/ThreeStrikesStore/ObservableThreeStrikesStore';
@@ -65,6 +65,7 @@ async function loadResourcesAsync() {
       require('./assets/images/robot-prod.png'),
     ]),
     Font.loadAsync({
+      ...Feather.font,
       // This is the font that we are using for our tab bar
       ...Ionicons.font,
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to

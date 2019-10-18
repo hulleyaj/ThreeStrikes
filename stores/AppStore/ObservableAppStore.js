@@ -1,5 +1,6 @@
 import { action, observable } from 'mobx';
 import { AsyncStorage } from 'react-native';
+import * as Battery from 'expo-battery';
 import { THEME_KEY } from '../../constants/AsyncStorageKeys';
 import { LIGHT, DARK } from '../../constants/Themes';
 
@@ -7,20 +8,16 @@ class ObservableAppStore {
   @observable theme = null;
 
   @action getTheme = async () => {
-    if (!this.theme) {
-      try {
-        this.theme = await AsyncStorage.getItem(THEME_KEY);
-      } catch (e) {
-        // uhhhh
-        console.log('error getting theme');
-      }
+    try {
+      const { lowPowerMode } = await Battery.getPowerStateAsync();
+
+      this.theme = lowPowerMode ? DARK : await AsyncStorage.getItem(THEME_KEY);
+    } catch (e) {
+      // uhhhh
+      console.log('error getting theme');
     }
 
-    if (!this.theme) {
-      this.theme = LIGHT;
-    }
-
-    return this.theme;
+    return this.theme || LIGHT;
   }
 
   @action setTheme = async newTheme => {
@@ -30,14 +27,12 @@ class ObservableAppStore {
         this.theme = newTheme;
       } catch (e) {
         // uhhhh
-        console.log('error setting themez');
+        console.log('error setting theme');
       }
     }
   }
-}
 
-// Battery.addLowPowerModeListener(() => {
-//   console.log('WOAHHH');
-// });
+  subscribeBattery = () => Battery.addLowPowerModeListener(() => this.getTheme());
+}
 
 export default new ObservableAppStore();

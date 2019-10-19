@@ -11,6 +11,7 @@ import { Provider, observer } from 'mobx-react';
 import observableCounterStore from './stores/CounterStore/ObservableCounterStore';
 import observableThreeStrikesStore from './stores/ThreeStrikesStore/ObservableThreeStrikesStore';
 import ObservableAppStore from './stores/AppStore/ObservableAppStore';
+import { registerForPushNotificationsAsync } from './utils/PushNotifications';
 import Colors from './constants/Colors';
 import { LIGHT, DARK } from './constants/Themes';
 
@@ -30,6 +31,10 @@ class App extends React.Component {
     this.state = {
       isLoadingComplete: false
     };
+  }
+
+  componentDidMount() {
+    registerForPushNotificationsAsync();
   }
 
   render() {

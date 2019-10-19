@@ -1,7 +1,7 @@
 import {
   observable, computed, runInAction, action
 } from 'mobx';
-import ThreeStrikesService from './services/ThreeStrikesService';
+import threeStrikesService from '../../services/ThreeStrikesService';
 import ThreeStrikesItem from './models/ThreeStrikesItem';
 
 export const STRIKE = -100;
@@ -19,12 +19,6 @@ class ObservableThreeStrikesStore {
   @observable bucket = [];
 
   priceDigits = [];
-
-  threeStrikesService;
-
-  constructor() {
-    this.threeStrikesService = new ThreeStrikesService();
-  }
 
   @computed get isStruckOut() {
     return this.bucket.indexOf(STRIKE) === -1;
@@ -61,7 +55,7 @@ class ObservableThreeStrikesStore {
         item: itemName
       };
       const urlParams = new URLSearchParams(Object.entries(params));
-      const data = await this.threeStrikesService.get(itemName ? urlParams : '');
+      const data = await threeStrikesService.get(itemName ? urlParams : '');
       runInAction(() => {
         // make a new tab for run in action and do thread.sleeps to show its transactions
         data.map(item => this.itemList.push(new ThreeStrikesItem(item)));

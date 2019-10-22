@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "423545514669",
+    "firebase_url": "https://threestrikes-396ed.firebaseio.com",
+    "project_id": "threestrikes-396ed",
+    "storage_bucket": "threestrikes-396ed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423545514669:android:5c09888eb872f275b53424",
+        "android_client_info": {
+          "package_name": "com.hulleyaj.threestrikes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423545514669-pc6uv0n1i0u9osk4de808kmv78v3hnus.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIWEzWDHrtqxskkLHSGRJfq1pJuTIANX8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423545514669-pc6uv0n1i0u9osk4de808kmv78v3hnus.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

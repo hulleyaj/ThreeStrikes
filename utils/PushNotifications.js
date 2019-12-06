@@ -1,5 +1,6 @@
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
+import * as Device from 'expo-device';
 import expoTokensService from '../services/ExpoTokensService';
 
 export const registerForPushNotificationsAsync = async () => {
@@ -22,17 +23,14 @@ export const registerForPushNotificationsAsync = async () => {
   }
 
   const token = await Notifications.getExpoPushTokenAsync();
+  const { modelName, osName, osVersion } = Device;
 
-  expoTokensService.post(token);
+  expoTokensService.post({
+    token,
+    modelName,
+    osName,
+    osVersion
+  });
 };
-
-// body: JSON.stringify({
-//   token: {
-//     value: token,
-//   },
-//   user: {
-//     username: 'Brent',
-//   },
-// }),
 
 export default registerForPushNotificationsAsync;

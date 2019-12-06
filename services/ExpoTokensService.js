@@ -3,17 +3,16 @@ import { root, headers } from '.';
 const url = `${root}/ExpoTokens`;
 
 class ExpoTokensService {
-  post = async token => {
+  post = async deviceInfo => {
     const request = new Request(url, {
       headers,
       method: 'POST',
       body: JSON.stringify({
-        token
+        ...deviceInfo
       })
     });
-    const response = await fetch(request);
 
-    return response.json();
+    fetch(request);
   }
 }
 

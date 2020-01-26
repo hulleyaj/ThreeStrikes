@@ -9,15 +9,16 @@ class ObservableAppStore {
 
   @action getTheme = async () => {
     try {
+      const storedTheme = await AsyncStorage.getItem(THEME_KEY) || LIGHT;
       const { lowPowerMode } = await Battery.getPowerStateAsync();
 
-      this.theme = lowPowerMode ? DARK : await AsyncStorage.getItem(THEME_KEY);
+      this.theme = lowPowerMode ? DARK : storedTheme;
     } catch (e) {
       // uhhhh
       console.log('error getting theme');
     }
 
-    return this.theme || LIGHT;
+    return this.theme;
   }
 
   @action setTheme = async newTheme => {

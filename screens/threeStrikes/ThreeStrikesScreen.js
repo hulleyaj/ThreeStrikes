@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import Icon from '../../components/Icon';
 import Strikes from './components/Strikes';
 import Guesses from './components/Guesses';
-import Bucket from './components/Bucket';
+import PuckBasket from './components/PuckBasket';
 import { LIGHT, DARK } from '../../constants/Themes';
 import Colors from '../../constants/Colors';
 
@@ -41,7 +41,7 @@ class ThreeStrikesScreen extends React.Component {
     return threeStrikesStore.selectedItem && <View style={ StyleSheet.flatten([styles.container, styles[theme]]) }>
       <Strikes { ...this.props } />
       <Guesses { ...this.props } />
-      <Bucket { ...this.props } />
+      <PuckBasket { ...this.props } />
     </View>;
   }
 }

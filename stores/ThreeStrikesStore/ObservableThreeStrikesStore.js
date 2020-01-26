@@ -4,47 +4,46 @@ import {
 import threeStrikesService from '../../services/ThreeStrikesService';
 import ThreeStrikesItem from './models/ThreeStrikesItem';
 
-export const STRIKE = -100;
-export const EMPTY = -1;
+export const STRIKE = 'X';
 
 class ObservableThreeStrikesStore {
   @observable correctGuesses = [];
-
-  @observable pulledPuck = EMPTY;
 
   @observable itemList = [];
 
   @observable selectedItem = null;
 
-  @observable bucket = [];
+  @observable puckBasket = [];
+
+  @observable currentPuck = null;
 
   priceDigits = [];
 
   @computed get isStruckOut() {
-    return this.bucket.indexOf(STRIKE) === -1;
+    return this.puckBasket.indexOf(STRIKE) === -1;
   }
 
   @computed get strikesPulledCount() {
-    return (3 - this.bucket.filter(puck => puck === STRIKE).length);
+    return (3 - this.puckBasket.filter(puck => puck === STRIKE).length);
   }
 
-  @action popPulledPuck = () => this.bucket.splice(this.bucket.indexOf(this.pulledPuck), 1);
+  @action popCurrentPuck = () => this.puckBasket.splice(this.puckBasket.indexOf(this.currentPuck), 1);
 
-  @action pullPuckFromBucket = () => { this.pulledPuck = this.bucket[Math.floor(Math.random() * this.bucket.length)]; }
+  @action pullPuckFromPuckBasket = () => { this.currentPuck = this.puckBasket[Math.floor(Math.random() * this.puckBasket.length)]; }
 
   @action takeGuess = index => {
-    if (index >= 0 && index < this.priceDigits.length && this.priceDigits[index] === this.pulledPuck) {
-      this.popPulledPuck();
-      this.correctGuesses[index] = this.pulledPuck;
+    if (index >= 0 && index < this.priceDigits.length && this.priceDigits[index] === this.currentPuck) {
+      this.popCurrentPuck();
+      this.correctGuesses[index] = this.currentPuck;
     }
-    this.pulledPuck = EMPTY;
+    this.currentPuck = null;
   }
 
   @action setItem = item => {
     this.selectedItem = item;
     this.priceDigits = (item.price.toString()).split('').map(digit => +digit);
-    this.bucket = [STRIKE, STRIKE, STRIKE, ...this.priceDigits];
-    this.correctGuesses = [...Array(this.priceDigits.length)].map(() => EMPTY);
+    this.puckBasket = [STRIKE, STRIKE, STRIKE, ...this.priceDigits];
+    this.correctGuesses = [...Array(this.priceDigits.length)].map(() => null);
   }
 
   getItemsAsync = async itemName => {

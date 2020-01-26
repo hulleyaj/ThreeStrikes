@@ -4,20 +4,20 @@ import {
   View, Text, StyleSheet, TouchableOpacity
 } from 'react-native';
 import { observer } from 'mobx-react';
-import { EMPTY, STRIKE } from '../../../stores/ThreeStrikesStore/ObservableThreeStrikesStore';
+import { STRIKE } from '../../../stores/ThreeStrikesStore/ObservableThreeStrikesStore';
 import Colors from '../../../constants/Colors';
 
 @observer
 class Guesses extends React.Component {
-  renderGuesses = ({ correctGuesses, takeGuess, pulledPuck }) =>
+  renderGuesses = ({ correctGuesses, takeGuess, currentPuck }) =>
     correctGuesses.map((guess, index) => {
-      const guessText = guess !== EMPTY ? guess : ' ';
-      const isDisabled = pulledPuck === EMPTY || pulledPuck === STRIKE;
-      const backgroundColor = isDisabled ? styles.guessDisabled : styles.guessEnabled;
+      const guessText = guess || ' ';
+      const isDisabled = !currentPuck || currentPuck === STRIKE;
+      const backgroundColor = isDisabled ? Colors.disabledOrangeButton : Colors.enabledOrangeButton;
 
       return <TouchableOpacity
         key={ index }
-        style={ StyleSheet.flatten([styles.guess, backgroundColor]) }
+        style={ { ...styles.guess, backgroundColor } }
         onPress={ () => takeGuess(index) }
         disabled={ isDisabled }
       >
@@ -53,12 +53,6 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'flex-end'
-  },
-  guessDisabled: {
-    backgroundColor: Colors.disabledOrangeButton
-  },
-  guessEnabled: {
-    backgroundColor: Colors.enabledOrangeButton
   },
   guessText: {
     fontSize: 40,

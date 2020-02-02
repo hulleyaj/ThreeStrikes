@@ -8,14 +8,14 @@ import {
 } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
 import { Provider, observer } from 'mobx-react';
-import observableCounterStore from './stores/CounterStore/ObservableCounterStore';
-import observableThreeStrikesStore from './stores/ThreeStrikesStore/ObservableThreeStrikesStore';
-import ObservableAppStore from './stores/AppStore/ObservableAppStore';
-import { registerForPushNotificationsAsync } from './utils/PushNotifications';
-import Colors from './constants/Colors';
-import { LIGHT, DARK } from './constants/Themes';
+import observableCounterStore from './src/stores/CounterStore/ObservableCounterStore';
+import observableThreeStrikesStore from './src/stores/ThreeStrikesStore/ObservableThreeStrikesStore';
+import ObservableAppStore from './src/stores/AppStore/ObservableAppStore';
+import { registerForPushNotificationsAsync } from './src/utils/PushNotifications';
+import Colors from './src/constants/Colors';
+import { LIGHT, DARK } from './src/constants/Themes';
 
-import AppNavigator from './navigation/AppNavigator';
+import AppNavigator from './src/navigation/AppNavigator';
 
 const stores = {
   counterStore: observableCounterStore,

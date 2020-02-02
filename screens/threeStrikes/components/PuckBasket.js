@@ -8,8 +8,6 @@ import { Feather } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
 import { STRIKE } from '../../../stores/ThreeStrikesStore/ObservableThreeStrikesStore';
 
-
-//LEFT off - try removing stylesheets.flatten
 //The pucks store should only deal with string '2' 'X' '1'
 //Make the pucks traverse to board location?
 const Puck = ({ threeStrikesStore: { currentPuck } }) => {

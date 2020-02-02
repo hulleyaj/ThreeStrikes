@@ -16,7 +16,7 @@ class CounterScreen extends React.Component {
   render() {
     const { screenProps: { theme } } = this.props;
 
-    return <View style={ StyleSheet.flatten([styles.container, styles[theme]]) }>
+    return <View style={ { ...styles.container, ...styles[theme] } }>
       <ReactCounter
         { ...this.props }
         counterStyles={ counterStyles }

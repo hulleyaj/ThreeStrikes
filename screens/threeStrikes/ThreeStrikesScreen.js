@@ -38,7 +38,7 @@ class ThreeStrikesScreen extends React.Component {
   render() {
     const { screenProps: { theme }, threeStrikesStore } = this.props;
 
-    return threeStrikesStore.selectedItem && <View style={ StyleSheet.flatten([styles.container, styles[theme]]) }>
+    return threeStrikesStore.selectedItem && <View style={ { ...styles.container, ...styles[theme] } }>
       <Strikes { ...this.props } />
       <Guesses { ...this.props } />
       <PuckBasket { ...this.props } />

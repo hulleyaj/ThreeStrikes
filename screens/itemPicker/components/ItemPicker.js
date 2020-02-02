@@ -32,7 +32,7 @@ class ItemPicker extends React.Component {
     } = this.props;
 
     return <View style={ styles.container }>
-      <Text style={ StyleSheet.flatten([headerStyles.text, headerStyles[theme]]) }>SELECT ITEM</Text>
+      <Text style={ { ...headerStyles.text, ...headerStyles[theme] } }>SELECT ITEM</Text>
       <View style={ styles.selectableItemContainer }>
         { this.renderSelectableItems(itemList, setItem, pop) }
       </View>

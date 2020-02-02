@@ -8,8 +8,6 @@ import { Feather } from '@expo/vector-icons';
 import Colors from '../../../constants/Colors';
 import { STRIKE } from '../../../stores/ThreeStrikesStore/ObservableThreeStrikesStore';
 
-//The pucks store should only deal with string '2' 'X' '1'
-//Make the pucks traverse to board location?
 const Puck = ({ threeStrikesStore: { currentPuck } }) => {
   const backgroundColor = currentPuck === STRIKE ? Colors.enabledRedButton : Colors.enabledGreenButton;
   const [fadeAnim] = React.useState(new Animated.Value(0));

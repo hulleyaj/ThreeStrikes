@@ -41,7 +41,7 @@ class ObservableThreeStrikesStore {
 
   @action setItem = item => {
     this.selectedItem = item;
-    this.priceDigits = (item.price.toString()).split('').map(digit => +digit);
+    this.priceDigits = item.price.toString().split('');
     this.puckBasket = [STRIKE, STRIKE, STRIKE, ...this.priceDigits];
     this.correctGuesses = [...Array(this.priceDigits.length)].map(() => null);
   }
